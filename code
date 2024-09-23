@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
+typedef enum {    TOKEN_INT, TOKEN_RETURN, TOKEN_IDENTIFIER, TOKEN_NUMBER,    TOKEN_LPAREN, TOKEN_RPAREN, TOKEN_LBRACE, TOKEN_RBRACE,    TOKEN_SEMICOLON, TOKEN_UNKNOWN, TOKEN_EOF} TokenType;
+typedef struct {    
+TokenType type;  
+  char value[100];
+} Token;
+Token tokens[100];
+int token_count = 0;
+int current_token = 0;
+void add_token(TokenType type, const char *value) {    
+Token token;    
+token.type = type;   
+ strcpy(token.value, value);   
+ tokens[token_count++] = token;
+void syntax_error(const char *message)
+ {    
+printf("Syntax Error: %s\n", message);    
+exit(1);
+}
+void match(TokenType expected_type) 
+{   
+ if (current_token < token_count && tokens[current_token].type == expected_type) {        
+current_token++; 
+   }
+ else 
+{       
+ char err_msg[100];       
+ sprintf(err_msg, "Expected %d but found %d ('%s')", expected_type,
+tokens[current_token].type, tokens[current_token].value);        syntax_error(err_msg);   
+ }
+}
+void statement() {   
+ match(TOKEN_RETURN);    
+match(TOKEN_NUMBER);    
+match(TOKEN_SEMICOLON);
+}
+identifier[len] = '\0';           
+ if (strcmp(identifier, "int") == 0) {                add_token(TOKEN_INT, identifier);           
+ } 
+else if (strcmp(identifier, "return") == 0) {                
+add_token(TOKEN_RETURN, identifier);           
+ } 
+else {                
+add_token(TOKEN_IDENTIFIER, identifier);           
+ }            
+continue;       
+ }        
+switch (*ptr) {            
+case '(': add_token(TOKEN_LPAREN, "("); break;            case ')': add_token(TOKEN_RPAREN, ")"); break;            case '{': add_token(TOKEN_LBRACE, "{"); break;            case '}': add_token(TOKEN_RBRACE, "}"); break;            case ';': add_token(TOKEN_SEMICOLON, ";"); break;            default: add_token(TOKEN_UNKNOWN, (char[]){*ptr, '\0'}); break;       
+ }     
+   ptr++;  
+  }    add_token(TOKEN_EOF, "EOF");}
+void syntax_error(const char *message)
+ {    
+printf("Syntax Error: %s\n", message);    
+exit(1);
+}
+void match(TokenType expected_type) 
+{   
+ if (current_token < token_count && tokens[current_token].type == expected_type) {        
+current_token++; 
+   }
+ else 
+{       
+ char err_msg[100];       
+ sprintf(err_msg, "Expected %d but found %d ('%s')", expected_type,
+tokens[current_token].type, tokens[current_token].value);        syntax_error(err_msg);   
+ }
+}
+void statement() {   
+ match(TOKEN_RETURN);    
+match(TOKEN_NUMBER);    
+match(TOKEN_SEMICOLON);
+}
+void function() {    
+match(TOKEN_INT);    
+match(TOKEN_IDENTIFIER);    
+match(TOKEN_LPAREN);    
+match(TOKEN_RPAREN);    
+match(TOKEN_LBRACE);    
+statement();    
+match(TOKEN_RBRACE);}
+void parse() {    
+function();    
+if (current_token < token_count - 1) 
+{        
+syntax_error("Unexpected tokens at the end");   
+ }
+ else {        
+printf("Parsing successful!\n");   
+ }
+}
+void run_test(const char *code) {   
+ printf("Testing code: %s\n", code);   
+ tokenize(code);    
+parse();   
+ current_token = 0; // Reset for next test case    token_count = 0;}
+int main() {    
+// Valid code    
+const char *code_valid = "int main() { return 0; }";    run_test(code_valid);    
+// Missing semicolon    const char *code_missing_semicolon = "int main() { return 0 }";    run_test(code_missing_semicolon);
+ return 0;}
